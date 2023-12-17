@@ -1,3 +1,5 @@
+https://www.science.org/doi/10.1126/science.aba9301#F2
+
 The study Habibi. et al exposed volunteers to respiratory syncytial virus (RSV), the pathogen responsible for the common cold to asses the role of the mucosal microenvironment
 in early responses to respiratory viral infections. The study is showing that neutrophilic inflammation in the airway at the time of pathogen exposure predisposes
 individuals to symptomatic infection while a mild and transient increase in nasal inflammatory mediators is accompanied by termination of viral infection. Also, the airway 
