@@ -90,14 +90,12 @@ differences <- setdiff(rownames(colData), colnames(counts_data))
 
 
 #Step 2: construct a DESeqDataSet object
-
 dds <- DESeqDataSetFromMatrix(countData = counts_data,
                               colData = colData,
                               design = ~ Outcome)
 
 keep <- rowSums(counts(dds) >= 35) >=6
 dds <- dds[keep,]
-dds
 
 #set factor level
 dds$Outcome <- relevel(dds$Outcome, ref = "Uninfected")
@@ -105,29 +103,43 @@ dds$Outcome <- relevel(dds$Outcome, ref = "Uninfected")
 
 #Step 3: Run DESeq
 dds <- DESeq(dds)
+resultsNames(dds)
+
+
+############
+res <- results(dds, alpha = 0.01)
+res_infected_vs_uninfected <- results(dds, contrast = c("Outcome", "Infected", "Uninfected"), alpha = 0.01)
+summary(res_infected_vs_uninfected)
+
+res_infected <- results(dds, contrast = c("Outcome", "Infected", "Uninfected"))
+DEGs_infected <- subset(res_infected, padj < 0.01 & log2FoldChange > 0.5)
+
+res_uninfected <- results(dds, contrast = c("Outcome", "Uninfected", "Infected"))
+DEGs_uninfected <- subset(res_uninfected, padj < 0.01 & log2FoldChange > 0.5)
+
+
+
+##########
 
 # Wald tests
 res <- results(dds)
-summary(res)
 
-
-res0.05 <- results(dds, alpha = 0.05)
-summary(res0.05)
+# Add Outcome information to the results DataFrame
+outcome_column <- colData(dds)$Outcome
+res$Outcome <- outcome_column
 
 res0.01 <- results(dds, alpha = 0.01)
 summary(res0.01)
 
-colnames(res)
-DEGs_inf_vs_uninf <- subset(res, padj < 0.01 & abs(log2FoldChange) > 0.5)
-head(DEGs_inf_vs_uninf)
-
-
 # contrasts
 resultsNames(dds)
 
+results <- results(dds, contrast = c("Outcome", "Infected", "Uninfected"))
+results
+
+
 # MA plot
 plotMA(res)
-
 
 
 
